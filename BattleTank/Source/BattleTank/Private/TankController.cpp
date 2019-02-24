@@ -1,9 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankController.h"
-#include "Runtime/Engine/Classes/GameFramework/Pawn.h"
 
+void ATankController::AimTowardsCrosshair()
+{
+	if (!GetControlledTank()) { return; }
 
+	//get world location if line trace crosshair
+		//if it hits landscape
+		//tell take to aim at this oint
+}
+
+void ATankController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	AimTowardsCrosshair();
+	//UE_LOG(LogTemp, Warning, TEXT("TICK TOCK"));
+}
 
 ATank * ATankController::GetControlledTank() const
 {
