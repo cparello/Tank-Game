@@ -21,12 +21,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void BeginPlay() override;
+	
 
 private:
 	void AimTowardsCrosshair();
 
 	ATank * GetControlledTank() const;
 
+	bool GetLookVectorHitDirection(FVector LookDirection, FVector& HitLocation) const;
 	//returns out param true if hit
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 
@@ -35,4 +37,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float CrosshairYLocation = 0.3333f;
+
+	UPROPERTY(EditAnywhere)
+	float LineTraceRange = 1000000.0f;
+
+	bool GetLookDirection(FVector2D ScreenLocation, FVector& OutLookDirection) const;
 };
