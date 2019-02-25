@@ -11,8 +11,7 @@ void ATankController::AimTowardsCrosshair()
 
 	if(GetSightRayHitLocation(OutHitLocation)) // has "side effect is going to line trace
 	{
-		UE_LOG(LogTemp, Warning, TEXT("hit location %s"), *OutHitLocation.ToString());
-			//TODO tell take to aim at this oint
+		GetControlledTank()->AimAt(OutHitLocation);
 	}
 
 }
