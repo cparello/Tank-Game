@@ -31,24 +31,24 @@ void ATankAIController::BeginPlay()
 	auto ControlledTank = GetControlledTank();
 	if (!ControlledTank)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerControllerNot  AI Posessing tank: %s"));
+		//UE_LOG(LogTemp, Warning, TEXT("PlayerControllerNot  AI Posessing tank: %s"));
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController  AI Posessing tank: %s"), *ControlledTank->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("PlayerController  AI Posessing tank: %s"), *ControlledTank->GetName());
 	}
-	UE_LOG(LogTemp, Warning, TEXT("PlayerController AI  Begin Play"));
+	//UE_LOG(LogTemp, Warning, TEXT("PlayerController AI  Begin Play"));
 
 	auto PlayerPawn = GetPlayerTank();
 	if (!PlayerPawn)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerPawn  Posessing tank: %s"));
+		//UE_LOG(LogTemp, Warning, TEXT("PlayerPawn  Posessing tank: %s"));
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerPawn  Posessing tank: %s"), *PlayerPawn->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("PlayerPawn  Posessing tank: %s"), *PlayerPawn->GetName());
 	}
-	UE_LOG(LogTemp, Warning, TEXT("PlayerPawn   Begin Play"));
+	//UE_LOG(LogTemp, Warning, TEXT("PlayerPawn   Begin Play"));
 }
 
 ATank * ATankAIController::GetPlayerTank() const

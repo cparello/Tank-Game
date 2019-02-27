@@ -35,12 +35,12 @@ void ATankController::BeginPlay()
 	auto ControlledTank = GetControlledTank();
 	if(!ControlledTank)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerControllerNot Posessing tank: %s"));
+		//UE_LOG(LogTemp, Warning, TEXT("PlayerControllerNot Posessing tank: %s"));
 	}else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController  Posessing tank: %s"), *ControlledTank->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("PlayerController  Posessing tank: %s"), *ControlledTank->GetName());
 	}
-	UE_LOG(LogTemp, Warning, TEXT("PlayerController Begin Play"));
+	//UE_LOG(LogTemp, Warning, TEXT("PlayerController Begin Play"));
 }
 
 bool ATankController::GetLookDirection(FVector2D ScreenLocation, FVector& OutLookDirection) const
