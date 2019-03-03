@@ -10,6 +10,7 @@
 
 class UTankTurret;
 class UTankAimingComponent;//forward declaration
+class UTankMovementComponent;//forward declaration
 class UTankBarrel;//forward declaration
 class AProjectile;
 
@@ -41,6 +42,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	UTankAimingComponent * TankAimingComponent = nullptr;
+	UPROPERTY(BlueprintReadOnly)
+	UTankMovementComponent * TankMovementComponent = nullptr;
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float LaunchSpeed = 100000;// sensible starting val
