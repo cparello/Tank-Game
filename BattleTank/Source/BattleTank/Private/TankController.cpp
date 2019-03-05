@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "TankController.h"
+#include "TankAimingComponent.h"
 #include "Tank.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 
@@ -31,6 +32,14 @@ ATank * ATankController::GetControlledTank() const
 void ATankController::BeginPlay()
 {
 	Super::BeginPlay();
+	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	if(AimingComponent)
+	{
+		FoundAimingComponent(AimingComponent);
+	}else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("CANT FIND AIMING COMPONENET"));
+	}
 }
 
 bool ATankController::GetLookDirection(FVector2D ScreenLocation, FVector& OutLookDirection) const
