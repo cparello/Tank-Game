@@ -25,11 +25,14 @@ public:
 
 	virtual void BeginPlay() override;
 	
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	ATank * GetControlledTank() const;
 
 private:
 	void AimTowardsCrosshair();
 
-	ATank * GetControlledTank() const;
+	
 
 	bool GetLookVectorHitDirection(FVector LookDirection, FVector& HitLocation) const;
 	//returns out param true if hit
