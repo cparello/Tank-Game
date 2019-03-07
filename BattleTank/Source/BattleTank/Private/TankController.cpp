@@ -6,7 +6,7 @@
 
 void ATankController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank()) { return; }
+	if (!ensure(GetControlledTank())) { return; }
 
 	FVector OutHitLocation;
 
@@ -33,13 +33,9 @@ void ATankController::BeginPlay()
 {
 	Super::BeginPlay();
 	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
-	if(AimingComponent)
-	{
+	if (!ensure(AimingComponent)) { return; }
 		FoundAimingComponent(AimingComponent);
-	}else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("CANT FIND AIMING COMPONENET"));
-	}
+	
 }
 
 bool ATankController::GetLookDirection(FVector2D ScreenLocation, FVector& OutLookDirection) const
