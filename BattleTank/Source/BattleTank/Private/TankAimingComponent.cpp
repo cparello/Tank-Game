@@ -25,6 +25,7 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
+
 void UTankAimingComponent::AimAt(FVector OutHitLocation)
 {
 	//auto OurTankName = GetOwner()->GetName();
@@ -41,7 +42,7 @@ void UTankAimingComponent::AimAt(FVector OutHitLocation)
 	// calculate the out launch velocity
 	if(UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVelocity, StartLocation, OutHitLocation, LaunchSpeed, false, 0, 0, ESuggestProjVelocityTraceOption::DoNotTrace))
 	{
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		AimDirection = OutLaunchVelocity.GetSafeNormal();
 
 		//UE_LOG(LogTemp, Warning, TEXT("Aim direction %s "), *AimDirection.ToString());
 		auto Time = GetWorld()->GetTimeSeconds();
@@ -72,11 +73,13 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 
 void UTankAimingComponent::Fire()
 {
-	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
+	
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 
 	if (isReloaded)
 	{
+		if (!ensure(Barrel)) { return; }
+		if (!ensure(ProjectileBlueprint)) { return; }
 		//spawn a projectile
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Barrel->GetSocketLocation(FName("Projectile")), Barrel->GetSocketRotation(FName("Projectile")));
 		if (!ensure(Projectile)) { return; }
@@ -84,4 +87,35 @@ void UTankAimingComponent::Fire()
 
 		LastFireTime = FPlatformTime::Seconds();
 	}
+}
+
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	if (!ensure(Barrel)) { return false; }
+
+	// workout offset of aim and barrel position
+	auto BarrelForward = Barrel->GetForwardVector();
+	return !BarrelForward.Equals(AimDirection, 0.01);
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType,	FActorComponentTickFunction* ThisTickFunction)
+{
+	if((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
+	{
+		UE_LOG(LogTemp, Warning, TEXT(" Reloading"))
+		FiringState = EFiringState::Reloading;
+	}else if(IsBarrelMoving())
+	{
+		UE_LOG(LogTemp, Warning, TEXT(" Aiming"))
+		FiringState = EFiringState::Aiming;
+	}else
+	{
+		UE_LOG(LogTemp, Warning, TEXT(" Locked "))
+		FiringState = EFiringState::Locked;
+	}
+}
+
+void UTankAimingComponent::BeginPlay()
+{
+	LastFireTime = FPlatformTime::Seconds();
 }
