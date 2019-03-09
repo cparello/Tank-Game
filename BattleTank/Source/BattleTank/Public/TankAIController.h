@@ -15,8 +15,9 @@ class BATTLETANK_API ATankAIController : public AAIController
 {
 	GENERATED_BODY()
 	
-private:
-	float AcceptanceRadius = 3000;
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float AcceptanceRadius = 8000;
 	
 public:
 	// Called every frame

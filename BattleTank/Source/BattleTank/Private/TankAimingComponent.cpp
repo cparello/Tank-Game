@@ -81,10 +81,9 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 
 void UTankAimingComponent::Fire()
 {
-	
-	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	//bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 
-	if (isReloaded)
+	if (FiringState == EFiringState::Locked || FiringState == EFiringState::Aiming)
 	{
 		if (!ensure(Barrel)) { return; }
 		if (!ensure(ProjectileBlueprint)) { return; }
@@ -94,7 +93,19 @@ void UTankAimingComponent::Fire()
 		Projectile->LaunchProjectile(LaunchSpeed);
 
 		LastFireTime = FPlatformTime::Seconds();
+
+		RoundsLeft--;
 	}
+}
+
+EFiringState UTankAimingComponent::GetFiringState() const
+{
+	return FiringState;
+}
+
+int UTankAimingComponent::GetRoundsLeft() const
+{
+	return RoundsLeft;
 }
 
 bool UTankAimingComponent::IsBarrelMoving()
@@ -108,17 +119,21 @@ bool UTankAimingComponent::IsBarrelMoving()
 
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType,	FActorComponentTickFunction* ThisTickFunction)
 {
-	if((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
+	if(RoundsLeft <= 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT(" Reloading"))
+		FiringState = EFiringState::OutOfAmmo;
+	}
+	else if((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT(" Reloading"))
 		FiringState = EFiringState::Reloading;
 	}else if(IsBarrelMoving())
 	{
-		UE_LOG(LogTemp, Warning, TEXT(" Aiming"))
+		//UE_LOG(LogTemp, Warning, TEXT(" Aiming"))
 		FiringState = EFiringState::Aiming;
 	}else
 	{
-		UE_LOG(LogTemp, Warning, TEXT(" Locked "))
+		//UE_LOG(LogTemp, Warning, TEXT(" Locked "))
 		FiringState = EFiringState::Locked;
 	}
 }
