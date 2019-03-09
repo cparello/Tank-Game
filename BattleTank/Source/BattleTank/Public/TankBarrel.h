@@ -20,7 +20,7 @@ public:
 	
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	float MaxDegreesPerSecond = 10;
+	float MaxDegreesPerSecond = 25;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float MaxElevationDegrees = 40;

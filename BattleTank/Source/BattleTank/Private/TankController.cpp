@@ -55,10 +55,10 @@ bool ATankController::GetSightRayHitLocation(FVector& OutHitLocation) const
 	{
 		//line trace along look direction
 		//UE_LOG(LogTemp, Warning, TEXT("Lookdirection: %s "), *OutLookDirection.ToString());
-		GetLookVectorHitDirection(OutLookDirection, OutHitLocation);
+		return GetLookVectorHitDirection(OutLookDirection, OutHitLocation);
 	}
 	//OutHitLocation = FVector(1.0f);
-	return true;
+	return false;
 }
 
 bool ATankController::GetLookVectorHitDirection(FVector LookDirection, FVector& OutHitLocation) const
