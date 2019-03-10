@@ -28,13 +28,6 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::AimAt(FVector OutHitLocation)
 {
-	//auto OurTankName = GetOwner()->GetName();
-	//auto BarrelLocation = Barrel->GetComponentLocation();
-	//UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s from %s"), *OurTankName, *OutHitLocation.ToString(), *BarrelLocation.ToString());
-
-	//UE_LOG(LogTemp, Warning, TEXT("firing at %f "), LaunchSpeed);
-
-
 	if (!ensure(Barrel)) { return; }
 	FVector OutLaunchVelocity(0);
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -43,19 +36,8 @@ void UTankAimingComponent::AimAt(FVector OutHitLocation)
 	if(UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVelocity, StartLocation, OutHitLocation, LaunchSpeed, false, 0, 0, ESuggestProjVelocityTraceOption::DoNotTrace))
 	{
 		AimDirection = OutLaunchVelocity.GetSafeNormal();
-
-		//UE_LOG(LogTemp, Warning, TEXT("Aim direction %s "), *AimDirection.ToString());
-		auto Time = GetWorld()->GetTimeSeconds();
-		//UE_LOG(LogTemp, Warning, TEXT(" %f AIM solution found"), Time)
 		MoveBarrelTowards(AimDirection);
 	}
-	else
-	{
-		auto Time = GetWorld()->GetTimeSeconds();
-		//UE_LOG(LogTemp, Warning, TEXT(" %f No AIM solution found"), Time)
-	}
-
-	
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
@@ -81,8 +63,6 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 
 void UTankAimingComponent::Fire()
 {
-	//bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-
 	if (FiringState == EFiringState::Locked || FiringState == EFiringState::Aiming)
 	{
 		if (!ensure(Barrel)) { return; }
@@ -121,19 +101,20 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType,	F
 {
 	if(RoundsLeft <= 0)
 	{
+		UE_LOG(LogTemp, Warning, TEXT(" AMMO"))
 		FiringState = EFiringState::OutOfAmmo;
 	}
 	else if((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT(" Reloading"))
+		UE_LOG(LogTemp, Warning, TEXT(" Reloading"))
 		FiringState = EFiringState::Reloading;
 	}else if(IsBarrelMoving())
 	{
-		//UE_LOG(LogTemp, Warning, TEXT(" Aiming"))
+		UE_LOG(LogTemp, Warning, TEXT(" Aiming"))
 		FiringState = EFiringState::Aiming;
 	}else
 	{
-		//UE_LOG(LogTemp, Warning, TEXT(" Locked "))
+		UE_LOG(LogTemp, Warning, TEXT(" Locked "))
 		FiringState = EFiringState::Locked;
 	}
 }

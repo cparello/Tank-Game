@@ -43,7 +43,7 @@ public:
 	EFiringState GetFiringState() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
-	int GetRoundsLeft() const;
+	int32 GetRoundsLeft() const;
 
 private:
 	bool IsBarrelMoving();
@@ -70,10 +70,10 @@ private:
 	FVector AimDirection;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	int RoundsLeft = 15;
+	int32 RoundsLeft = 15;
 
 protected:
-	UPROPERTY(BlueprintReadOnly, Category = "State")
+	UPROPERTY(EditDefaultsOnly, Category = "State")
 	EFiringState FiringState = EFiringState::Reloading;
 
 };
