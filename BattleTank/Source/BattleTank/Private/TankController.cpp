@@ -15,7 +15,6 @@ void ATankController::AimTowardsCrosshair()
 	{
 		AimingComponent->AimAt(OutHitLocation);
 	}
-
 }
 
 void ATankController::Tick(float DeltaTime)

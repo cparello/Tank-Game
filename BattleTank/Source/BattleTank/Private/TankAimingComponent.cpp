@@ -101,7 +101,7 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType,	F
 {
 	if(RoundsLeft <= 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT(" AMMO"))
+		UE_LOG(LogTemp, Warning, TEXT(" AMMO %i"), RoundsLeft)
 		FiringState = EFiringState::OutOfAmmo;
 	}
 	else if((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
