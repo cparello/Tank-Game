@@ -101,20 +101,20 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType,	F
 {
 	if(RoundsLeft <= 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT(" AMMO %i"), RoundsLeft)
+		//UE_LOG(LogTemp, Warning, TEXT(" AMMO %i"), RoundsLeft)
 		FiringState = EFiringState::OutOfAmmo;
 	}
 	else if((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds)
 	{
-		UE_LOG(LogTemp, Warning, TEXT(" Reloading"))
+		//UE_LOG(LogTemp, Warning, TEXT(" Reloading"))
 		FiringState = EFiringState::Reloading;
 	}else if(IsBarrelMoving())
 	{
-		UE_LOG(LogTemp, Warning, TEXT(" Aiming"))
+		//UE_LOG(LogTemp, Warning, TEXT(" Aiming"))
 		FiringState = EFiringState::Aiming;
 	}else
 	{
-		UE_LOG(LogTemp, Warning, TEXT(" Locked "))
+		//UE_LOG(LogTemp, Warning, TEXT(" Locked "))
 		FiringState = EFiringState::Locked;
 	}
 }
