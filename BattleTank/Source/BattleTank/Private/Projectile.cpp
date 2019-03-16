@@ -6,7 +6,6 @@
 #include "PhysicsEngine/RadialForceComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/DamageType.h"
-#include "Components/StaticMeshComponent.h"
 #include "Components/SceneComponent.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
@@ -18,31 +17,50 @@ AProjectile::AProjectile()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	//CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));
+	//SetRootComponent(CollisionMesh);
+	//CollisionMesh->SetNotifyRigidBodyCollision(true);
+	//CollisionMesh->SetVisibility(false);
+
+	//LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
+	//LaunchBlast->SetupAttachment(RootComponent);
+
+	//ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast"));
+	//ImpactBlast->SetupAttachment(RootComponent);
+	//ImpactBlast->bAutoActivate = false;
+
+	//ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));
+	//ProjectileMovement->bAutoActivate = false;
+
+	//ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Movement"));
+	//ExplosionForce->SetupAttachment(RootComponent);
+	//ExplosionForce->bAutoActivate = false;
+
 	CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));
 	SetRootComponent(CollisionMesh);
 	CollisionMesh->SetNotifyRigidBodyCollision(true);
 	CollisionMesh->SetVisibility(false);
 
 	LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
-	LaunchBlast->SetupAttachment(RootComponent);
-
-	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast"));
-	ImpactBlast->SetupAttachment(RootComponent);
-	ImpactBlast->bAutoActivate = false;
+	LaunchBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));
 	ProjectileMovement->bAutoActivate = false;
 
-	ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Movement"));
-	ExplosionForce->SetupAttachment(RootComponent);
-	//ExplosionForce->bAutoActivate = false;
+	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast"));
+	ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	ImpactBlast->bAutoActivate = false;
+
+	ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Force"));
+	ExplosionForce->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
-	UE_LOG(LogTemp, Warning, TEXT("  Hit BeginPlay"))
-	Super::BeginPlay();
+	auto name = GetOwner()->GetName();
+	UE_LOG(LogTemp, Warning, TEXT("  Hit BeginPlay %s "), *name)
+		Super::BeginPlay();
 	CollisionMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 }
 
@@ -54,8 +72,20 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	ExplosionForce->FireImpulse();
 	SetRootComponent(ImpactBlast);
 	CollisionMesh->DestroyComponent();
+	
+	TArray<AActor*> Ignore;
+	Ignore.Add(this);
 
-	UGameplayStatics::ApplyRadialDamage(this, ProjectileDamage, GetActorLocation(), ExplosionForce->Radius, UDamageType::StaticClass(), TArray<AActor*>());
+	//UGameplayStatics::ApplyRadialDamage(this, ProjectileDamage, GetActorLocation(), ExplosionForce->Radius, UDamageType::StaticClass(), Ignore);
+	UGameplayStatics::ApplyRadialDamage(this,
+		ProjectileDamage,
+		GetActorLocation(),
+		ExplosionForce->Radius, // For Consistancy - Will bind the Damage Radiu to the Explosion Impulse Radius
+		UDamageType::StaticClass(),
+		Ignore,
+		GetInstigator(),
+		GetInstigatorController()
+	);
 	UE_LOG(LogTemp, Warning, TEXT(" damage "))
 
 	FTimerHandle Timer;

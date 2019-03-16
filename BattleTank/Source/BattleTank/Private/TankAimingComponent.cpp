@@ -121,5 +121,6 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType,	F
 
 void UTankAimingComponent::BeginPlay()
 {
+	Super::BeginPlay();
 	LastFireTime = FPlatformTime::Seconds();
 }
