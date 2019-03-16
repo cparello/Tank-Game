@@ -31,4 +31,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "Setup")
 	int32 CurrentHealth = StartingHealth;
+
+private:
+
 };
