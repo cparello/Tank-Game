@@ -15,6 +15,7 @@ GENERATED_BODY()
 public:	
 	// Sets default values for this actor's properties
 	ASprungWheel();
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -32,6 +33,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UPhysicsConstraintComponent* MassWheelConstraint = nullptr;
 
-	
+	void  SetupConstraint();
 	
 };
