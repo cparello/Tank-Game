@@ -31,7 +31,13 @@ private:
 	UStaticMeshComponent* Wheel = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UStaticMeshComponent* Axel = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UPhysicsConstraintComponent* MassWheelConstraint = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPhysicsConstraintComponent* AxelWheelConstraint = nullptr;
 
 	void  SetupConstraint();
 	
