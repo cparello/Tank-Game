@@ -9,13 +9,14 @@
 #include "Components/SceneComponent.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "Components/StaticMeshComponent.h"
 
 
 // Sets default values
 AProjectile::AProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	//CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));
 	//SetRootComponent(CollisionMesh);
@@ -41,18 +42,18 @@ AProjectile::AProjectile()
 	CollisionMesh->SetNotifyRigidBodyCollision(true);
 	CollisionMesh->SetVisibility(false);
 
-// 	LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
-// 	LaunchBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-// 
- 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));
- 	ProjectileMovement->bAutoActivate = false;
-// 
-// 	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast"));
-// 	ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-// 	ImpactBlast->bAutoActivate = false;
-// 
-// 	ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Force"));
-// 	ExplosionForce->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
+	LaunchBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
+	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));
+	ProjectileMovement->bAutoActivate = false;
+
+	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast"));
+	ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	ImpactBlast->bAutoActivate = false;
+
+	ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Force"));
+	ExplosionForce->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned
@@ -66,29 +67,29 @@ void AProjectile::BeginPlay()
 void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
 	UE_LOG(LogTemp, Warning, TEXT(" I am Hit "))
-// 	LaunchBlast->Deactivate();
-// 	ImpactBlast->Activate();
-// 	ExplosionForce->FireImpulse();
-// 	SetRootComponent(ImpactBlast);
-// 	CollisionMesh->DestroyComponent();
-// 	
-// 	TArray<AActor*> Ignore;
-// 	Ignore.Add(this);
-// 
-// 	//UGameplayStatics::ApplyRadialDamage(this, ProjectileDamage, GetActorLocation(), ExplosionForce->Radius, UDamageType::StaticClass(), Ignore);
-// 	UGameplayStatics::ApplyRadialDamage(this,
-// 		ProjectileDamage,
-// 		GetActorLocation(),
-// 		ExplosionForce->Radius, // For Consistancy - Will bind the Damage Radiu to the Explosion Impulse Radius
-// 		UDamageType::StaticClass(),
-// 		Ignore,
-// 		GetInstigator(),
-// 		GetInstigatorController()
-// 	);
-// 	UE_LOG(LogTemp, Warning, TEXT(" damage "))
-// 
-// 	FTimerHandle Timer;
-// 	GetWorld()->GetTimerManager().SetTimer(Timer, this, &AProjectile::OnTimerExpire, DestroyDelay, false);
+	LaunchBlast->Deactivate();
+	ImpactBlast->Activate();
+	ExplosionForce->FireImpulse();
+	SetRootComponent(ImpactBlast);
+	CollisionMesh->DestroyComponent();
+	
+	TArray<AActor*> Ignore;
+	Ignore.Add(this);
+
+	//UGameplayStatics::ApplyRadialDamage(this, ProjectileDamage, GetActorLocation(), ExplosionForce->Radius, UDamageType::StaticClass(), Ignore);
+	UGameplayStatics::ApplyRadialDamage(this,
+		ProjectileDamage,
+		GetActorLocation(),
+		ExplosionForce->Radius, // For Consistancy - Will bind the Damage Radiu to the Explosion Impulse Radius
+		UDamageType::StaticClass(),
+		Ignore,
+		GetInstigator(),
+		GetInstigatorController()
+	);
+	UE_LOG(LogTemp, Warning, TEXT(" damage "))
+
+	FTimerHandle Timer;
+	GetWorld()->GetTimerManager().SetTimer(Timer, this, &AProjectile::OnTimerExpire, DestroyDelay, false);
 }
 
 void AProjectile::OnTimerExpire()

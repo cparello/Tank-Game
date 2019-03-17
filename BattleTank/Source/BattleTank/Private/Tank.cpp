@@ -34,3 +34,9 @@ float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AC
 
 	return DamageToApply;
 }
+
+void ATank::BeginPlay()
+{
+	Super::BeginPlay();
+	CurrentHealth = StartingHealth;
+}

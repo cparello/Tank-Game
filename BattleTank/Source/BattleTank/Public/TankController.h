@@ -23,6 +23,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void BeginPlay() override;
+
+	virtual void SetPawn(APawn * InPawn) override;
+
+	UFUNCTION()
+	void OnPossessedTankDeath();
 	
 protected:
 

@@ -2,6 +2,8 @@
 #include "TankController.h"
 #include "TankAimingComponent.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
+#include "Tank.h"
+#include "TankAIController.h"
 
 void ATankController::AimTowardsCrosshair()
 {
@@ -31,6 +33,28 @@ void ATankController::BeginPlay()
 	if (!ensure(AimingComponent)) { return; }
 		FoundAimingComponent(AimingComponent);
 	
+}
+
+void ATankController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+		//subscribe death
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankController::OnPossessedTankDeath);
+	}
+}
+
+void ATankController::OnPossessedTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("death"))
+		if (!GetPawn())
+		{
+			return;
+		}
+	StartSpectatingOnly();
 }
 
 bool ATankController::GetLookDirection(FVector2D ScreenLocation, FVector& OutLookDirection) const
@@ -66,7 +90,7 @@ bool ATankController::GetLookVectorHitDirection(FVector LookDirection, FVector& 
 	auto StartLocation = PlayerCameraManager->GetCameraLocation();
 	auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
 
-	if(GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility))
+	if(GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Camera))
 	{
 		OutHitLocation = HitResult.Location;
 		return true;
