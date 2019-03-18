@@ -3,6 +3,7 @@
 #include "SprungWheel.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values
 ASprungWheel::ASprungWheel()
@@ -13,10 +14,10 @@ ASprungWheel::ASprungWheel()
 	MassWheelConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("MassWheelConstraint"));
 	SetRootComponent(MassWheelConstraint);
 
-	Axel = CreateDefaultSubobject<UStaticMeshComponent>(FName("Axel"));
+	Axel = CreateDefaultSubobject<USphereComponent>(FName("Axel"));
 	Axel->SetupAttachment(MassWheelConstraint);
 
-	Wheel = CreateDefaultSubobject<UStaticMeshComponent>(FName("Wheel"));
+	Wheel = CreateDefaultSubobject<USphereComponent>(FName("Wheel"));
 	Wheel->SetupAttachment(Axel);
 	
 	AxelWheelConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("AxelWheelConstraint"));
