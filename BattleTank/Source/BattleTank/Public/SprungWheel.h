@@ -29,6 +29,11 @@ protected:
 	virtual void BeginPlay() override;
 
 private:	
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	void ApplyForce();
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USphereComponent* Wheel = nullptr;
 
@@ -42,5 +47,7 @@ private:
 	UPhysicsConstraintComponent* AxelWheelConstraint = nullptr;
 
 	void  SetupConstraint();
+
+	float TotalForceMagnitudeThisFrame;
 	
 };
